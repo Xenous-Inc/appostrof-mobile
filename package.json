@@ -7,7 +7,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "eslint --cache --fix ./src/",
+    "lint": "eslint --cache --fix .",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-gesture-handler": "~2.8.0",
+    "react-native-reanimated": "~2.12.0",
     "xenous-logs": "^1.0.0"
   },
   "devDependencies": {
