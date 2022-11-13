@@ -3,5 +3,5 @@ export default {
     TEXT_BIG: 22,
     TEXT_MEDIUM: 20,
     TEXT_SMALL: 16,
-    TEXT_LITTLE: 14,
+    TEXT_LITTLE: 12,
 };
