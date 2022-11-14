@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-	"typeRoots": ["node_modules/@types", ".types"],
+	  "typeRoots": ["node_modules/@types", ".types"],
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@models/*": ["src/models/*"]
     }
   },
   "extends": "expo/tsconfig.base"
