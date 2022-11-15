@@ -1,15 +1,7 @@
 interface IQuote {
-    id: string | null;
+    id: string;
     text: string | null;
     storyId: string | null;
 }
 
-class Quote implements IQuote {
-    id: string | null;
-    text: string | null;
-    storyId: string | null;
-
-    // TODO add constructor
-}
-
-export default Quote;
+export default IQuote;
