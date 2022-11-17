@@ -2,8 +2,12 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/Regular.ttf",
+      "sha1": "b334209f43426374b709e42e3185dc46478a96ba"
+    },
+    {
       "path": "assets/fonts/SemiBold.ttf",
-      "sha1": "9dd7c8e0a103ff7d074b046272a87e4a0565e6b2"
+      "sha1": "45974cf9acbd1be118f2b426c7cfab33ee584e3c"
     }
   ]
 }

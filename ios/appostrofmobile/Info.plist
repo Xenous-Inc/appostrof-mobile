@@ -53,6 +53,7 @@
 	<string>UIStatusBarStyleDefault</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Regular.ttf</string>
 		<string>SemiBold.ttf</string>
 	</array>
 </dict>
