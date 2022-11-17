@@ -8,6 +8,7 @@ const colors = {
 };
 
 export const namedColors = new Map<string, string>([
+    ['softwhite', '#fffdf9'],
     ['aliceblue', '#f0f8ff'],
     ['antiquewhite', '#faebd7'],
     ['aqua', '#00ffff'],
