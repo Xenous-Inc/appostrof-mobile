@@ -1,5 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { GET_NEW_STORY_ACTIONS, IGetNewStoryActionFail, IGetNewStoryActionSuccess } from '../actions/story/types';
+import {
+    ASSIGN_STORY_WAS_READ_ACTIONS,
+    GET_NEW_STORY_ACTIONS,
+    IAssignStoryWasReadActionFail,
+    IAssignStoryWasReadActionSuccess,
+    IGetNewStoryActionFail,
+    IGetNewStoryActionSuccess,
+    IRateStoryActionFail,
+    IRateStoryActionSuccess,
+    RATE_STORY_ACTIONS,
+} from '../actions/story/types';
 import { IApiState } from '../types';
 import logs from '@utils/logs';
 import IStory from '@models/story';
@@ -37,6 +47,64 @@ const storyReducer = createReducer(initialState, {
     },
     [GET_NEW_STORY_ACTIONS.FAIL]: (state, action: IGetNewStoryActionFail) => {
         logs.redux.error(`GET_NEW_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
+
+        return {
+            ...state,
+            isLoading: false,
+            error: action.payload.error,
+        };
+    },
+    // * Assign Story Was Read * //
+    [ASSIGN_STORY_WAS_READ_ACTIONS.START]: state => {
+        logs.redux.debug('ASSIGN_STORY_WAS_READ_ACTION | Request pending');
+
+        return {
+            ...state,
+            isLoading: true,
+            error: null,
+        };
+    },
+    // TODO get rid of unused parameter
+    [ASSIGN_STORY_WAS_READ_ACTIONS.SUCCESS]: (state, action: IAssignStoryWasReadActionSuccess) => {
+        logs.redux.debug('ASSIGN_STORY_WAS_READ_ACTION | Request ended with success');
+
+        return {
+            ...state,
+            isLoading: false,
+            error: null,
+        };
+    },
+    [ASSIGN_STORY_WAS_READ_ACTIONS.FAIL]: (state, action: IAssignStoryWasReadActionFail) => {
+        logs.redux.error(`ASSIGN_STORY_WAS_READ_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
+
+        return {
+            ...state,
+            isLoading: false,
+            error: action.payload.error,
+        };
+    },
+    // * Rate Story * //
+    [RATE_STORY_ACTIONS.START]: state => {
+        logs.redux.debug('RATE_STORY_ACTION | Request pending');
+
+        return {
+            ...state,
+            isLoading: true,
+            error: null,
+        };
+    },
+    // TODO get rid of unused parameter
+    [RATE_STORY_ACTIONS.SUCCESS]: (state, action: IRateStoryActionSuccess) => {
+        logs.redux.debug('RATE_STORY_ACTION | Request ended with success');
+
+        return {
+            ...state,
+            isLoading: false,
+            error: null,
+        };
+    },
+    [RATE_STORY_ACTIONS.FAIL]: (state, action: IRateStoryActionFail) => {
+        logs.redux.error(`RATE_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
 
         return {
             ...state,
