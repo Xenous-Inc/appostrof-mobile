@@ -1,11 +1,11 @@
 import React from 'react';
-import StoryScreen from '@components/organisms/story_screen';
+import StoryScreen from './screens/story_screen';
 import { useFonts } from 'expo-font';
 
 export default function App() {
     const [loaded] = useFonts({
-        SemiBold: require('../assets/fonts/SemiBold.ttf'),
-        Regular: require('../assets/fonts/Regular.ttf'),
+        SemiBold: require('./assets/fonts/SemiBold.ttf'),
+        Regular: require('./assets/fonts/Regular.ttf'),
     });
 
     if (!loaded) {
