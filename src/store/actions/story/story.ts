@@ -1,4 +1,4 @@
-import { IAssignStoryWasReadApiRequest, IGetNewStoryApiRequest, IRateStoryApiRequest } from '../../../api/types/story';
+import { IAssignStoryWasReadApiRequest, IGetNewStoryApiRequest, IRateStoryApiRequest } from '@api/types/story';
 import {
     ASSIGN_STORY_WAS_READ_ACTIONS,
     GET_NEW_STORY_ACTIONS,
@@ -8,7 +8,7 @@ import {
     RATE_STORY_ACTIONS,
 } from './types';
 
-import { RESTS } from '../../../api/constants';
+import { RESTS } from '@api/constants';
 
 export const createGetNewStoryAction = (raw: IGetNewStoryApiRequest): IGetNewStoryAction => ({
     type: GET_NEW_STORY_ACTIONS.DEFAULT,

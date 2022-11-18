@@ -16,21 +16,14 @@ export interface IGetNewStoryApiResponse {
 /**
  * @description This interface describes data which API needs to Assign Story Was Read
  */
-export type IAssignStoryWasReadApiRequest = ITokenApiRequest;
-
-/**
- * @description This interface describes data which API returns on Assign Story Was Read Request
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IAssignStoryWasReadApiResponse {} // TODO fix
+export interface IAssignStoryWasReadApiRequest extends ITokenApiRequest {
+    id: string;
+}
 
 /**
  * @description This interface describes data which API needs to Rate Story
  */
-export type IRateStoryApiRequest = ITokenApiRequest;
-
-/**
- * @description This interface describes data which API returns on Rate Story Request
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IRateStoryApiResponse {} // TODO fix
+export interface IRateStoryApiRequest extends ITokenApiRequest {
+    id: string;
+    rating: number;
+}

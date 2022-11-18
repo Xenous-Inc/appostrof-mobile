@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { IApiError } from '../api/types';
+import { IApiError } from '@api/types';
 import { LOCAL_ERROR_CODE } from './constants';
 
 /**

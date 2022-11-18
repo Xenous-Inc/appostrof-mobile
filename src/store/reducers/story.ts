@@ -3,11 +3,9 @@ import {
     ASSIGN_STORY_WAS_READ_ACTIONS,
     GET_NEW_STORY_ACTIONS,
     IAssignStoryWasReadActionFail,
-    IAssignStoryWasReadActionSuccess,
     IGetNewStoryActionFail,
     IGetNewStoryActionSuccess,
     IRateStoryActionFail,
-    IRateStoryActionSuccess,
     RATE_STORY_ACTIONS,
 } from '../actions/story/types';
 import { IApiState } from '../types';
@@ -38,10 +36,14 @@ const storyReducer = createReducer(initialState, {
     [GET_NEW_STORY_ACTIONS.SUCCESS]: (state, action: IGetNewStoryActionSuccess) => {
         logs.redux.debug('GET_NEW_STORY_ACTION | Request ended with success');
 
+        const newStory = action.payload.story;
+
+        logs.redux.debug('GET_NEW_STORY_ACTION | New Story state', newStory);
+
         return {
             ...state,
             isLoading: false,
-            story: action.payload.story,
+            story: newStory,
             error: null,
         };
     },
@@ -65,7 +67,7 @@ const storyReducer = createReducer(initialState, {
         };
     },
     // TODO get rid of unused parameter
-    [ASSIGN_STORY_WAS_READ_ACTIONS.SUCCESS]: (state, action: IAssignStoryWasReadActionSuccess) => {
+    [ASSIGN_STORY_WAS_READ_ACTIONS.SUCCESS]: state => {
         logs.redux.debug('ASSIGN_STORY_WAS_READ_ACTION | Request ended with success');
 
         return {
@@ -94,7 +96,7 @@ const storyReducer = createReducer(initialState, {
         };
     },
     // TODO get rid of unused parameter
-    [RATE_STORY_ACTIONS.SUCCESS]: (state, action: IRateStoryActionSuccess) => {
+    [RATE_STORY_ACTIONS.SUCCESS]: state => {
         logs.redux.debug('RATE_STORY_ACTION | Request ended with success');
 
         return {
