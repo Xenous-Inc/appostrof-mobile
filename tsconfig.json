@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-	  "typeRoots": ["node_modules/@types", ".types"],
+    "typeRoots": ["node_modules/@types", ".types"],
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
