@@ -3,12 +3,12 @@ const colors = {
     WHITE: '#FFFFFF',
     GRAY: '#323232',
     BLUE: '#ADC9CF',
+    SOFT_WHITE: '#FFFDF9',
 
     TEXT_PRIMARY: '#1D1D1D',
 };
 
 export const namedColors = new Map<string, string>([
-    ['softwhite', '#fffdf9'],
     ['aliceblue', '#f0f8ff'],
     ['antiquewhite', '#faebd7'],
     ['aqua', '#00ffff'],
