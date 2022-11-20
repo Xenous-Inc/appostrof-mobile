@@ -13,7 +13,7 @@ const config = {
     transportOptions: {
         colors: 'ansi',
     },
-    enabledExtensions: ['ui', 'hooks', 'redux', 'api', 'middlewares', 'utils'] as const,
+    enabledExtensions: ['ui', 'hooks', 'redux', 'api', 'middlewares', 'utils', 'storage'] as const,
     async: true,
     dateFormat: __DEV__ ? 'time' : 'utc',
     printLevel: true,
