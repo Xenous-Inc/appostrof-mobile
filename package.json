@@ -20,7 +20,8 @@
     "react-native-progress": "^5.0.0",
     "react-native-svg": "^13.6.0",
     "react-native-reanimated": "~2.12.0",
-    "xenous-logs": "^1.0.0"
+    "xenous-logs": "^1.0.0",
+    "expo-font": "~11.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
