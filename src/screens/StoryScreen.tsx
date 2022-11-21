@@ -1,5 +1,5 @@
-import { StyleSheet, View, Image, Text, ScrollView, Dimensions } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, View, Image, Text, ScrollView, Dimensions } from 'react-native';
 import * as Progress from 'react-native-progress';
 import colors from '@styles/colors';
 import AppBar from '@components/molecules/AppBar';
@@ -15,6 +15,7 @@ const StoryScreen = () => {
     const [progress, setProgress] = useState(0);
     const [progressNum, setProgressNum] = useState(0);
     const [fontSize, setFontSize] = useState(18);
+
     return (
         <View style={styles.background}>
             <ScrollView

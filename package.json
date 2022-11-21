@@ -14,6 +14,7 @@
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/stack": "^6.3.4",
     "expo": "~47.0.3",
+    "expo-font": "~11.0.1",
     "expo-splash-screen": "~0.17.4",
     "expo-status-bar": "~1.4.2",
     "expo-storage": "^47.0.0",
@@ -21,10 +22,10 @@
     "react-native": "0.70.5",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-progress": "^5.0.0",
-    "react-native-svg": "^13.6.0",
     "react-native-reanimated": "~2.12.0",
-    "xenous-logs": "^1.0.0",
-    "expo-font": "~11.0.1"
+    "react-native-safe-area-context": "^4.4.1",
+    "react-native-svg": "13.4.0",
+    "xenous-logs": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

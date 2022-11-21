@@ -7,7 +7,7 @@ export default function App() {
         OpenSans_SemiBold: require('@assets/fonts/OpenSans_SemiBold.ttf'),
         OpenSans_Regular: require('@assets/fonts/OpenSans_Regular.ttf'),
     });
-    
+
     if (!fontsLoaded) {
         return null;
     }

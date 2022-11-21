@@ -10,7 +10,7 @@ export type AccountStackParams = {
 
 const Stack = createStackNavigator<AccountStackParams>();
 
-// TODO fill with Screens
+// TODO: fill with Screens
 const AccountStack: React.FC = () => {
     return (
         <Stack.Navigator initialRouteName={Screens.Account.PROFILE}>

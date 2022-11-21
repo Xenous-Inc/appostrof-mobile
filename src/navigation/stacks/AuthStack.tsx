@@ -10,7 +10,7 @@ export type AuthStackParams = {
 
 const Stack = createStackNavigator<AuthStackParams>();
 
-// TODO fill with Screens
+// TODO: fill with Screens
 const AuthStack: React.FC = () => {
     return (
         <Stack.Navigator initialRouteName={Screens.Auth.WELCOME}>
