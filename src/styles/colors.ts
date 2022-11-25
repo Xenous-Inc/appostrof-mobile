@@ -4,6 +4,7 @@ const colors = {
     GRAY: '#323232',
     BLUE: '#ADC9CF',
     SOFT_WHITE: '#FFFDF9',
+    SKELETON: '#F0F0F0',
 
     TEXT_PRIMARY: '#1D1D1D',
 };
