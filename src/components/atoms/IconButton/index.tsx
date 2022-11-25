@@ -12,6 +12,7 @@ import {
     StyleSheet,
     Text,
     TextStyle,
+    ViewProps,
     ViewStyle,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -22,7 +23,7 @@ enum Mode {
     Blank = 'blank',
 }
 
-export interface IIconButton {
+export interface IIconButton extends ViewProps {
     mode?: Mode;
     title?: string;
     icon?: ReactElement;
@@ -73,6 +74,7 @@ const IconButton: React.FC<IIconButton> & { Mode: typeof Mode } = props => {
 
     return (
         <Animated.View
+            {...props}
             style={[
                 styles.wrapper,
                 containerStyle,
