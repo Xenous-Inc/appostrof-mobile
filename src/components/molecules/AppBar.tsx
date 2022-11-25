@@ -1,42 +1,70 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { GestureResponderEvent, Image, StyleSheet, Text, View } from 'react-native';
+import strings from '@utils/strings';
+import sizes from '@styles/sizes';
+import colors from '@styles/colors';
+import Space from '@components/atoms/Space';
+import IconButton from '@components/atoms/IconButton';
 
-const AppBar = () => {
+export interface IAppBar {
+    onAccountPress?(event: GestureResponderEvent): void;
+    onSettingsPress?(event: GestureResponderEvent): void;
+}
+
+const AppBar: React.FC<IAppBar> = props => {
+    const { onAccountPress, onSettingsPress } = props;
+
     return (
-        <View style={styles.app_bar}>
-            <Text style={styles.app_bar_text}>Appostraf</Text>
-            <View style={styles.icons_container}>
-                <Image style={styles.logo} source={require('@assets/icons/user.png')} />
-                <Image style={styles.settings} source={require('@assets/icons/settings.png')} />
+        <View style={styles.wrapper}>
+            <Text style={styles.content__title}>{strings.TITLE}</Text>
+            <View style={styles.content__actions}>
+                <IconButton
+                    icon={
+                        <Image
+                            style={styles.actions__icon}
+                            resizeMode={'contain'}
+                            source={require('@assets/icons/user.png')}
+                        />
+                    }
+                    onPress={onAccountPress}
+                />
+                <Space mode={'horizontal'} size={4} />
+                <IconButton
+                    icon={
+                        <Image
+                            style={styles.actions__icon}
+                            resizeMode={'contain'}
+                            source={require('@assets/icons/settings.png')}
+                        />
+                    }
+                    onPress={onSettingsPress}
+                />
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    app_bar: {
-        width: '100%',
-        height: 40,
+    wrapper: {
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
     },
-    logo: {
-        width: 34,
-        height: 34,
-        marginRight: 25,
-    },
-    settings: {
-        width: 26,
-        height: 16,
-    },
-    app_bar_text: {
-        fontSize: 27,
+    content__title: {
         fontFamily: 'OpenSans_SemiBold',
+        fontSize: sizes.TEXT_LARGE,
+        color: colors.TEXT_PRIMARY,
     },
-    icons_container: {
+    content__actions: {
         flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
+    },
+    actions__icon: {
+        width: 32,
+        height: 32,
+        aspectRatio: 1,
     },
 });
 
