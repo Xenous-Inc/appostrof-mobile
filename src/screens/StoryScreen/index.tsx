@@ -1,5 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Image, LayoutChangeEvent, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+    Dimensions,
+    Image,
+    LayoutChangeEvent,
+    ScrollView,
+    StyleProp,
+    StyleSheet,
+    Text,
+    View,
+    ViewStyle,
+} from 'react-native';
 import colors from '@styles/colors';
 import AppBar from '@components/molecules/AppBar';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -55,6 +65,7 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     // window safe area height
     const insets = useSafeAreaInsets();
     const windowHeight = useMemo(() => Dimensions.get('screen').height - insets.top - insets.bottom, [insets]);
+    const windowWidth = useMemo(() => Dimensions.get('screen').width, [insets]);
 
     // defines shift in pixels, is used to translate story view to make animated transition
     const [storyTextShift, setStoryTextShift] = useState(0);
@@ -106,9 +117,17 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
     const progressBarAnimatedStyle = useAnimatedStyle(
         () => ({
-            transform: [{ translateY: bookIconShift * (1 - collapseProgress.value) }],
+            width: Math.min(windowWidth * collapseProgress.value * 1.2, windowWidth * 0.9),
+            opacity: collapseProgress.value,
         }),
-        [bookIconShift],
+        [storyTextShift],
+    );
+    const progressAnimatedStyle = useAnimatedStyle(
+        () => ({
+            width: 200,
+            opacity: collapseProgress.value,
+        }),
+        [storyTextShift],
     );
     // transform: translate author view during the animated transition
     const authorAnimatedStyle = useAnimatedStyle(
@@ -119,6 +138,14 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     );
     // transform: translate book icon view during the animated transition
     const bookIconAnimatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateX: Math.max(-windowWidth * collapseProgress.value, -windowWidth * 0.8) }],
+            opacity: Math.max(1 - collapseProgress.value * 3, 0),
+        }),
+        [storyTextShift],
+    );
+
+    const progressContainerAnimatedStyle = useAnimatedStyle(
         () => ({
             transform: [{ translateY: storyTextShift * collapseProgress.value }],
         }),
@@ -163,9 +190,6 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
     return (
         <SafeAreaView>
-            <Animated.View style={[styles.wrapper__progress, { marginTop: insets.top }, progressBarAnimatedStyle]}>
-                <Progress.Bar />
-            </Animated.View>
             <ScrollView
                 style={styles.wrapper__content}
                 decelerationRate={isCoverCollapsed ? 'normal' : 0.6}
@@ -204,13 +228,19 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
                             <Animated.Text style={[styles.row__author, authorAnimatedStyle]}>
                                 Автор: William B.
                             </Animated.Text>
-                            <IconButton
-                                containerStyle={bookIconAnimatedStyle}
-                                source={require('@assets/icons/book.png')}
-                                imageStyle={styles.row__icon}
-                                title={'12%'}
-                                onLayout={handleBookIconLayout}
-                            />
+                            <Animated.View style={[{ flexDirection: 'column' }, progressContainerAnimatedStyle]}>
+                                <IconButton
+                                    containerStyle={bookIconAnimatedStyle}
+                                    source={require('@assets/icons/book.png')}
+                                    imageStyle={styles.row__icon}
+                                    title={'12%'}
+                                    onLayout={handleBookIconLayout}
+                                />
+                                <ProgressBar
+                                    styleProgress={progressAnimatedStyle}
+                                    styleProgressBar={progressBarAnimatedStyle}
+                                />
+                            </Animated.View>
                         </View>
                     </View>
 
@@ -265,10 +295,32 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     );
 };
 
+export interface IProgressBar {
+    styleProgressBar: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>;
+    styleProgress: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>;
+}
+
+const ProgressBar: React.FC<IProgressBar> = props => {
+    const { styleProgressBar, styleProgress } = props;
+    return (
+        <Animated.View style={[styleProgressBar, styles.progressBar]}>
+            <Animated.View style={[styleProgress, styles.progress]} />
+        </Animated.View>
+    );
+};
+
 const styles = StyleSheet.create({
-    wrapper__progress: {
+    progress: {
+        color: '#1a1a1a',
+    },
+    progressBar: {
+        height: 8,
+        borderRadius: 20,
+        borderColor: '#1a1a1a',
+        borderWidth: 1,
+        alignSelf: 'flex-end',
+        marginTop: 10,
         position: 'absolute',
-        zIndex: 1000,
     },
     wrapper__content: { backgroundColor: colors.SOFT_WHITE },
     content__cover: { flexDirection: 'column', alignItems: 'flex-start', padding: 20 },
