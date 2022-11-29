@@ -1,4 +1,4 @@
-import { API_ERROR_CODE } from '../constants';
+import { ApiErrorCode } from '@api/constants';
 
 /**
  * @description This interface describes the data which API needs to work with request which needs user to be authorized
@@ -9,7 +9,7 @@ export interface ITokenApiRequest {
 }
 
 export interface IApiError {
-    code: API_ERROR_CODE;
+    code: ApiErrorCode;
 
     message: string;
 }

@@ -1,38 +1,46 @@
-import { IAssignStoryWasReadApiRequest, IGetNewStoryApiRequest, IRateStoryApiRequest } from '@api/types/story';
+import { IReadStoryApiRequest, IGetNewStoryApiRequest, IRateStoryApiRequest } from '@api/types/story';
 import {
-    ASSIGN_STORY_WAS_READ_ACTIONS,
-    GET_NEW_STORY_ACTIONS,
-    IAssignStoryWasReadAction,
-    IGetNewStoryAction,
+    ReadStoryActions,
+    GetStoryActions,
+    IReadStoryAction,
+    IGetStoryAction,
     IRateStoryAction,
-    RATE_STORY_ACTIONS,
+    RateStoryActions,
 } from './types';
 
-import { RESTS } from '@api/constants';
+import { Rests } from '@api/constants';
+import { StorageKeys } from '@utils/storage';
+import { ActionFlagsNames, HTTPMethod } from '../../constants';
 
-export const createGetNewStoryAction = (raw: IGetNewStoryApiRequest): IGetNewStoryAction => ({
-    type: GET_NEW_STORY_ACTIONS.DEFAULT,
+export const createGetStoryAction = (raw: IGetNewStoryApiRequest): IGetStoryAction => ({
+    type: GetStoryActions.DEFAULT,
     payload: {
-        method: 'GET',
-        rest: RESTS.STORY.GET,
+        method: HTTPMethod.Get,
+        rest: Rests.Story.GET,
         data: raw,
+        key: StorageKeys.STORY_CACHE,
     },
+    flags: [
+        {
+            name: ActionFlagsNames.Storage,
+        },
+    ],
 });
 
-export const createAssignStoryWasReadAction = (raw: IAssignStoryWasReadApiRequest): IAssignStoryWasReadAction => ({
-    type: ASSIGN_STORY_WAS_READ_ACTIONS.DEFAULT,
+export const createReadStoryAction = (raw: IReadStoryApiRequest): IReadStoryAction => ({
+    type: ReadStoryActions.DEFAULT,
     payload: {
-        method: 'POST',
-        rest: RESTS.STORY.READ,
+        method: HTTPMethod.Post,
+        rest: Rests.Story.READ,
         data: raw,
     },
 });
 
 export const createRateStoryAction = (raw: IRateStoryApiRequest): IRateStoryAction => ({
-    type: RATE_STORY_ACTIONS.DEFAULT,
+    type: RateStoryActions.DEFAULT,
     payload: {
-        method: 'POST',
-        rest: RESTS.STORY.RATE,
+        method: HTTPMethod.Post,
+        rest: Rests.Story.RATE,
         data: raw,
     },
 });

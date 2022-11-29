@@ -16,7 +16,7 @@ export interface IGetNewStoryApiResponse {
 /**
  * @description This interface describes data which API needs to Assign Story Was Read
  */
-export interface IAssignStoryWasReadApiRequest extends ITokenApiRequest {
+export interface IReadStoryApiRequest extends ITokenApiRequest {
     id: string;
 }
 

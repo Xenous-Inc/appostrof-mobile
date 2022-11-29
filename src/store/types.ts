@@ -1,18 +1,18 @@
 import { Action } from 'redux';
 import { IApiError } from '@api/types';
-import { LOCAL_ERROR_CODE } from './constants';
+import { ActionFlagsNames, HTTPMethod, LocalErrorCode } from './constants';
 
 /**
  * @description This interfaces describes the data which every Redux Action contains
  * @field payload - Redux Action payload
  * @field prevAction - Action, that was dispatched before current
+ * @field flags - Array of action flags
  */
 export interface IAction<T = string, P = unknown, PA = unknown> extends Action<T> {
     payload: P;
     prevAction?: PA;
+    flags?: Array<IActionFlag>;
 }
-
-type HTTPMethod = 'GET' | 'POST';
 
 /**
  * @description This interface describes Error Redux Action payload
@@ -24,17 +24,23 @@ export interface IFailedApiAction<T, PA = unknown> extends IAction<T, { error: I
 }
 
 /**
- * @description This interface describes Redux Action Payload data, which needs to create an HTTP request to API
+ * @description This interface describes Redux Action Payload data, which is needed to create an HTTP request to API
  * @field rest - URI
  * @field method - HTTP method type
  * @field data - API action data
- * @field flags - Array of action flags
  */
 export interface IApiPayload<D = unknown> {
     rest: string;
     method: HTTPMethod;
     data: D;
-    flags?: Array<IActionFlag>;
+}
+
+/**
+ * @description This interface describes Redux Action Payload data, which is needed to get Storage Data
+ * @field key - key that storage needs to find data
+ */
+export interface IStoragePayload {
+    key: string;
 }
 
 /**
@@ -43,7 +49,7 @@ export interface IApiPayload<D = unknown> {
  * @field data - Redux Action Flag data
  */
 export interface IActionFlag<D = unknown> {
-    name: string;
+    name: ActionFlagsNames;
     data?: D;
 }
 
@@ -54,7 +60,7 @@ export interface IApiState {
 }
 
 export interface ILocalError {
-    code: LOCAL_ERROR_CODE;
+    code: LocalErrorCode;
 
     message: string;
 }

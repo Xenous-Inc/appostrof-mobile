@@ -1,12 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-    ASSIGN_STORY_WAS_READ_ACTIONS,
-    GET_NEW_STORY_ACTIONS,
-    IAssignStoryWasReadActionFail,
-    IGetNewStoryActionFail,
-    IGetNewStoryActionSuccess,
+    ReadStoryActions,
+    GetStoryActions,
+    IReadStoryActionFail,
+    IGetStoryActionFail,
+    IGetStoryActionSuccess,
     IRateStoryActionFail,
-    RATE_STORY_ACTIONS,
+    RateStoryActions,
 } from '../actions/story/types';
 import { IApiState } from '../types';
 import logs from '@utils/logs';
@@ -24,8 +24,8 @@ const initialState: IStoryState = {
 
 const storyReducer = createReducer(initialState, {
     // * Get New Story * //
-    [GET_NEW_STORY_ACTIONS.START]: state => {
-        logs.redux.debug('GET_NEW_STORY_ACTION | Request pending');
+    [GetStoryActions.START]: state => {
+        logs.redux.debug('GET_STORY_ACTION | Request pending');
 
         return {
             ...state,
@@ -33,22 +33,22 @@ const storyReducer = createReducer(initialState, {
             error: null,
         };
     },
-    [GET_NEW_STORY_ACTIONS.SUCCESS]: (state, action: IGetNewStoryActionSuccess) => {
-        logs.redux.debug('GET_NEW_STORY_ACTION | Request ended with success');
+    [GetStoryActions.SUCCESS]: (state, action: IGetStoryActionSuccess) => {
+        logs.redux.debug('GET_STORY_ACTION | Request ended with success');
 
-        const newStory = action.payload.story;
+        const story = action.payload.story;
 
-        logs.redux.debug('GET_NEW_STORY_ACTION | New Story state', newStory);
+        logs.redux.debug('GET_STORY_ACTION | New Story state', story);
 
         return {
             ...state,
             isLoading: false,
-            story: newStory,
+            story: story,
             error: null,
         };
     },
-    [GET_NEW_STORY_ACTIONS.FAIL]: (state, action: IGetNewStoryActionFail) => {
-        logs.redux.error(`GET_NEW_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
+    [GetStoryActions.FAIL]: (state, action: IGetStoryActionFail) => {
+        logs.redux.error(`GET_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
 
         return {
             ...state,
@@ -57,8 +57,8 @@ const storyReducer = createReducer(initialState, {
         };
     },
     // * Assign Story Was Read * //
-    [ASSIGN_STORY_WAS_READ_ACTIONS.START]: state => {
-        logs.redux.debug('ASSIGN_STORY_WAS_READ_ACTION | Request pending');
+    [ReadStoryActions.START]: state => {
+        logs.redux.debug('READ_STORY_ACTION | Request pending');
 
         return {
             ...state,
@@ -66,9 +66,8 @@ const storyReducer = createReducer(initialState, {
             error: null,
         };
     },
-    // TODO get rid of unused parameter
-    [ASSIGN_STORY_WAS_READ_ACTIONS.SUCCESS]: state => {
-        logs.redux.debug('ASSIGN_STORY_WAS_READ_ACTION | Request ended with success');
+    [ReadStoryActions.SUCCESS]: state => {
+        logs.redux.debug('READ_STORY_ACTION | Request ended with success');
 
         return {
             ...state,
@@ -76,8 +75,8 @@ const storyReducer = createReducer(initialState, {
             error: null,
         };
     },
-    [ASSIGN_STORY_WAS_READ_ACTIONS.FAIL]: (state, action: IAssignStoryWasReadActionFail) => {
-        logs.redux.error(`ASSIGN_STORY_WAS_READ_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
+    [ReadStoryActions.FAIL]: (state, action: IReadStoryActionFail) => {
+        logs.redux.error(`READ_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
 
         return {
             ...state,
@@ -86,7 +85,7 @@ const storyReducer = createReducer(initialState, {
         };
     },
     // * Rate Story * //
-    [RATE_STORY_ACTIONS.START]: state => {
+    [RateStoryActions.START]: state => {
         logs.redux.debug('RATE_STORY_ACTION | Request pending');
 
         return {
@@ -95,8 +94,7 @@ const storyReducer = createReducer(initialState, {
             error: null,
         };
     },
-    // TODO get rid of unused parameter
-    [RATE_STORY_ACTIONS.SUCCESS]: state => {
+    [RateStoryActions.SUCCESS]: state => {
         logs.redux.debug('RATE_STORY_ACTION | Request ended with success');
 
         return {
@@ -105,7 +103,7 @@ const storyReducer = createReducer(initialState, {
             error: null,
         };
     },
-    [RATE_STORY_ACTIONS.FAIL]: (state, action: IRateStoryActionFail) => {
+    [RateStoryActions.FAIL]: (state, action: IRateStoryActionFail) => {
         logs.redux.error(`RATE_STORY_ACTION | Request ended with fail. Error: ${action.payload.error}.`);
 
         return {

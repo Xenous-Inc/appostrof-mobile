@@ -1,58 +1,49 @@
-import { IAction, IApiPayload, IFailedApiAction } from '../../types';
+import { IAction, IApiPayload, IFailedApiAction, IStoragePayload } from '../../types';
 import {
-    IAssignStoryWasReadApiRequest,
+    IReadStoryApiRequest,
     IGetNewStoryApiRequest,
     IGetNewStoryApiResponse,
     IRateStoryApiRequest,
 } from '@api/types/story';
 
-export enum GET_NEW_STORY_ACTIONS {
-    DEFAULT = 'GET_NEW_STORY',
-    START = 'GET_NEW_STORY_START',
-    SUCCESS = 'GET_NEW_STORY_SUCCESS',
-    FAIL = 'GET_NEW_STORY_FAIL',
-}
-
-export type IGetNewStoryAction = IAction<GET_NEW_STORY_ACTIONS.DEFAULT, IApiPayload<IGetNewStoryApiRequest>>;
-
-export type IGetNewStoryActionSuccess = IAction<
-    GET_NEW_STORY_ACTIONS.SUCCESS,
-    IGetNewStoryApiResponse,
-    IGetNewStoryAction
->;
-
-export type IGetNewStoryActionFail = IFailedApiAction<GET_NEW_STORY_ACTIONS.FAIL, IGetNewStoryAction>;
+const baseActions = (str: string) => ({
+    DEFAULT: str,
+    START: str + '_START',
+    SUCCESS: str + '_SUCCESS',
+    FAIL: str + '_FAIL',
+});
 
 /**
- * ASSIGN STORY ACTIONS
+ * GET STORY ACTIONS
  * */
-export enum ASSIGN_STORY_WAS_READ_ACTIONS {
-    DEFAULT = 'ASSIGN_STORY_WAS_READ',
-    START = 'ASSIGN_STORY_WAS_READ_START',
-    SUCCESS = 'ASSIGN_STORY_WAS_READ_SUCCESS',
-    FAIL = 'ASSIGN_STORY_WAS_READ_FAIL',
-}
+export const GetStoryActions = baseActions('GET_STORY');
+type TGetStoryActions = typeof GetStoryActions;
 
-export type IAssignStoryWasReadAction = IAction<
-    ASSIGN_STORY_WAS_READ_ACTIONS.DEFAULT,
-    IApiPayload<IAssignStoryWasReadApiRequest>
+export type IGetStoryAction = IAction<
+    TGetStoryActions['DEFAULT'],
+    IStoragePayload & IApiPayload<IGetNewStoryApiRequest>
 >;
 
-export type IAssignStoryWasReadActionFail = IFailedApiAction<
-    ASSIGN_STORY_WAS_READ_ACTIONS.FAIL,
-    IAssignStoryWasReadAction
->;
+export type IGetStoryActionSuccess = IAction<TGetStoryActions['SUCCESS'], IGetNewStoryApiResponse, IGetStoryAction>;
+
+export type IGetStoryActionFail = IFailedApiAction<TGetStoryActions['FAIL'], IGetStoryAction>;
+
+/**
+ * READ STORY ACTIONS
+ * */
+export const ReadStoryActions = baseActions('READ_STORY');
+type TReadStoryActions = typeof ReadStoryActions;
+
+export type IReadStoryAction = IAction<TReadStoryActions['DEFAULT'], IApiPayload<IReadStoryApiRequest>>;
+
+export type IReadStoryActionFail = IFailedApiAction<TReadStoryActions['FAIL'], IReadStoryAction>;
 
 /**
  * RATE STORY ACTIONS
  * */
-export enum RATE_STORY_ACTIONS {
-    DEFAULT = 'RATE_STORY',
-    START = 'RATE_STORY_START',
-    SUCCESS = 'RATE_STORY_SUCCESS',
-    FAIL = 'RATE_STORY_FAIL',
-}
+export const RateStoryActions = baseActions('RATE_STORY');
+type TRateStoryActions = typeof RateStoryActions;
 
-export type IRateStoryAction = IAction<RATE_STORY_ACTIONS.DEFAULT, IApiPayload<IRateStoryApiRequest>>;
+export type IRateStoryAction = IAction<TRateStoryActions['DEFAULT'], IApiPayload<IRateStoryApiRequest>>;
 
-export type IRateStoryActionFail = IFailedApiAction<RATE_STORY_ACTIONS.FAIL, IRateStoryAction>;
+export type IRateStoryActionFail = IFailedApiAction<TRateStoryActions['FAIL'], IRateStoryAction>;

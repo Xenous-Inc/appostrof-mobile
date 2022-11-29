@@ -1,13 +1,13 @@
-export enum API_ERROR_CODE {}
+export enum ApiErrorCode {}
 
-const REST_CONSTANTS = {
+const RestConstants = {
     STORY: 'story/',
 };
 
-export const RESTS = {
-    STORY: {
-        GET: REST_CONSTANTS.STORY,
-        RATE: REST_CONSTANTS.STORY + 'rate/',
-        READ: REST_CONSTANTS.STORY + 'read/',
+export const Rests = {
+    Story: {
+        GET: RestConstants.STORY,
+        RATE: RestConstants.STORY + 'rate/',
+        READ: RestConstants.STORY + 'read/',
     },
 };
