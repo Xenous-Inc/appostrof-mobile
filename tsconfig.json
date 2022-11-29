@@ -8,7 +8,8 @@
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
       "@models/*": ["src/models/*"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@navigation/*": ["src/navigation/*"]
     }
   },
   "extends": "expo/tsconfig.base"
