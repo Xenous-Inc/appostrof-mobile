@@ -17,7 +17,7 @@ export interface IAction<T = string, P = unknown, PA = unknown> extends Action<T
 /**
  * @description This interface describes Error Redux Action payload
  */
-export interface IFailedApiAction<T, PA = unknown> extends IAction<T, { error: IApiError }, PA> {
+export interface IFailedApiAction<T, PA = unknown> extends IAction<T, unknown, PA> {
     payload: {
         error: IApiError;
     };

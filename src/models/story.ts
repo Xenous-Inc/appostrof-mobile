@@ -11,6 +11,8 @@ interface IStory {
     tags: Array<string> | null;
     rating: number | null;
     dateOfWriting: string | null;
+    dateOfReading: string | null;
+    percentOfReading: number | null;
 }
 
 export default IStory;

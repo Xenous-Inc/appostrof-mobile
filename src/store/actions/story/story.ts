@@ -24,6 +24,9 @@ export const createGetStoryAction = (raw: IGetNewStoryApiRequest): IGetStoryActi
         {
             name: ActionFlagsNames.Storage,
         },
+        {
+            name: ActionFlagsNames.Api,
+        },
     ],
 });
 

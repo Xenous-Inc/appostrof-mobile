@@ -5,13 +5,7 @@ import {
     IGetNewStoryApiResponse,
     IRateStoryApiRequest,
 } from '@api/types/story';
-
-const baseActions = (str: string) => ({
-    DEFAULT: str,
-    START: str + '_START',
-    SUCCESS: str + '_SUCCESS',
-    FAIL: str + '_FAIL',
-});
+import { baseActions } from '../constants';
 
 /**
  * GET STORY ACTIONS

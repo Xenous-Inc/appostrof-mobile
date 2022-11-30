@@ -1,10 +1,17 @@
 import cleanerMiddleware from './middlewares/cleaner';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducers';
+import storageMiddleware from './middlewares/storage';
+import storageFinalizerMiddleware from './middlewares/storageFinalizer';
 
 const store = configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => [...getDefaultMiddleware(), cleanerMiddleware],
+    middleware: getDefaultMiddleware => [
+        ...getDefaultMiddleware(),
+        storageMiddleware,
+        storageFinalizerMiddleware,
+        cleanerMiddleware,
+    ],
 });
 
 export default store;
