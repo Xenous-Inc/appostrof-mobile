@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+    Image,
     ImageSourcePropType,
     ImageStyle,
     StyleProp,
@@ -8,7 +9,6 @@ import {
     TextStyle,
     View,
     ViewStyle,
-    Image,
 } from 'react-native';
 import colors from '@styles/colors';
 import sizes from '@styles/sizes';

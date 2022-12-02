@@ -1,6 +1,6 @@
 import React from 'react';
-import { Screens } from '../constants';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Screens } from '../constants';
 
 export type AccountStackParams = {
     [Screens.Account.PROFILE]: undefined;

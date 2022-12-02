@@ -10,7 +10,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import Space from '@components/atoms/Space';
 import sizes from '@styles/sizes';
 import { darkenColor, setAlpha } from '@utils/colors';

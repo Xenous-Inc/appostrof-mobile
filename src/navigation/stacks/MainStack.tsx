@@ -1,7 +1,7 @@
 import React from 'react';
-import { Screens } from '../constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import StoryScreen from '@screens/StoryScreen';
+import { Screens } from '../constants';
 
 export type MainStackParams = {
     [Screens.Main.STORY]: undefined;
