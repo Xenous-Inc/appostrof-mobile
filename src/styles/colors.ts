@@ -1,11 +1,13 @@
 const colors = {
     TRANSPARENT: '#00000000',
     WHITE: '#FFFFFF',
+    BLACK: '#000000',
     GRAY: '#323232',
     BLUE: '#ADC9CF',
     SOFT_WHITE: '#FFFDF9',
-    SKELETON: '#F0F0F0',
 
+    PROGRESS: '#C2C0BD',
+    SKELETON: '#F0F0F0',
     TEXT_PRIMARY: '#1D1D1D',
 };
 
