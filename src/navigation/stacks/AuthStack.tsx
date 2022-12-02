@@ -1,6 +1,6 @@
 import React from 'react';
-import { Screens } from '../constants';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Screens } from '../constants';
 
 export type AuthStackParams = {
     [Screens.Auth.WELCOME]: undefined;
@@ -10,7 +10,7 @@ export type AuthStackParams = {
 
 const Stack = createStackNavigator<AuthStackParams>();
 
-// TODO fill with Screens
+// TODO: fill with Screens
 const AuthStack: React.FC = () => {
     return (
         <Stack.Navigator initialRouteName={Screens.Auth.WELCOME}>
