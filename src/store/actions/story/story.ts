@@ -37,6 +37,11 @@ export const createReadStoryAction = (raw: IReadStoryApiRequest): IReadStoryActi
         rest: Rests.Story.READ,
         data: raw,
     },
+    flags: [
+        {
+            name: ActionFlagsNames.Api,
+        },
+    ],
 });
 
 export const createRateStoryAction = (raw: IRateStoryApiRequest): IRateStoryAction => ({
@@ -46,4 +51,9 @@ export const createRateStoryAction = (raw: IRateStoryApiRequest): IRateStoryActi
         rest: Rests.Story.RATE,
         data: raw,
     },
+    flags: [
+        {
+            name: ActionFlagsNames.Api,
+        },
+    ],
 });
