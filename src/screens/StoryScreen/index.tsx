@@ -1,5 +1,16 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Dimensions, Image, LayoutChangeEvent, ScrollViewProps, StyleSheet, Text, View, ViewProps } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+    AppState,
+    Dimensions,
+    Image,
+    LayoutChangeEvent,
+    Pressable,
+    ScrollViewProps,
+    StyleSheet,
+    Text,
+    View,
+    ViewProps,
+} from 'react-native';
 import colors from '@styles/colors';
 import AppBar from '@components/molecules/AppBar';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -24,6 +35,10 @@ import SkeletonLoader from 'expo-skeleton-loader';
 import { LoaderItemStyle } from 'expo-skeleton-loader/lib/Constants';
 import durations from '@styles/durations';
 import { StatusBar } from 'expo-status-bar';
+import { StorageKeys, writeData } from '@utils/storage';
+import IStory from '@models/story';
+import { useAppState } from '@react-native-community/hooks';
+import BookStencil from '@assets/icons/book_stencil.svg';
 
 const DATA =
     'Отец мой Андрей Петрович Гринев в молодости своей служил при графе Минихе и вышел в ' +
@@ -55,6 +70,20 @@ const DATA =
     '«Слава богу, — ворчал он про себя, — кажется, дитя умыт, причесан, накормлен. Куда как нужно\n' +
     'тратить лишние деньги и';
 
+const story: IStory = {
+    id: '0',
+    title: 'story',
+    authors: [{ id: '0', name: 'Nikita' }],
+    description: 'super',
+    cover: 'cover',
+    timeToRead: 300,
+    linkToText: 'link',
+    tags: ['po', 'pi'],
+    rating: 4,
+    dateOfWriting: '1 sep',
+    progress: 0.8,
+};
+
 const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Main.STORY>> = () => {
     // window safe area height
     const insets = useSafeAreaInsets();
@@ -78,9 +107,12 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     // defines progress of collapsing: from 0 to 1
     const collapseProgress = useSharedValue(0);
     // defines progress of scrolling: from 0 to 1
-    const scrollProgress = useSharedValue(0);
+    const scrollProgress = useSharedValue(story.progress);
     // defines progress of measuring short story layout: 0 or 1
     const isShortStoryMeasured = useSharedValue(false);
+
+    // defines current app state active/background
+    const currentAppState = useAppState();
 
     // disable paging after cover collapse
     const scrollViewAnimatedProps = useAnimatedProps<ScrollViewProps>(
@@ -89,6 +121,16 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         }),
         [],
     );
+
+    useEffect(() => {
+        console.log(currentAppState);
+        console.log(story.progress);
+        if (currentAppState === 'background') {
+            // FIXME:
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
+        }
+    }, [currentAppState]);
 
     // disable story text pointer events while cover is not collapsed
     const storyTextAnimatedProps = useAnimatedProps<ViewProps>(
@@ -101,7 +143,7 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     const handleScrollAnimated = useAnimatedScrollHandler(
         event => {
             collapseProgress.value = Math.min(event.contentOffset.y / windowHeight, 1);
-            scrollProgress.value = Math.max((event.contentOffset.y - windowHeight) / storyTextHeight, 0);
+            scrollProgress.value = Math.max(event.contentOffset.y / storyTextHeight, 0);
         },
         [windowHeight, storyTextHeight],
     );
@@ -187,6 +229,24 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         return { transform: [{ translateY }] };
     }, [shortStoryTextShiftBottom]);
 
+    const progressAnimatedStyle = useAnimatedStyle(() => {
+        const width = interpolate(
+            collapseProgress.value,
+            [0, 1],
+            [0, (windowWidth - styles.wrapper__progress.marginHorizontal * 2) * scrollProgress.value],
+            Extrapolation.CLAMP,
+        );
+
+        const borderRadius = interpolate(
+            collapseProgress.value,
+            [1 / 3, 1],
+            [styles.wrapper__progress.borderRadius, 0],
+            Extrapolation.CLAMP,
+        );
+
+        return { width, borderTopLeftRadius: borderRadius, borderTopRightRadius: borderRadius };
+    }, [bookIconShiftTop, bookIconShiftRight, shortStoryTextShiftBottom, insets.top]);
+
     // transform: translate book icon view during the animated transition
     const bookIconAnimatedStyle = useAnimatedStyle(() => {
         const opacity = interpolate(collapseProgress.value, [16 / 48, 17 / 48], [1, 0], Extrapolation.CLAMP);
@@ -255,7 +315,7 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         <SafeAreaView>
             <StatusBar backgroundColor={colors.BLACK} style={'light'} />
             <Animated.View style={[styles.wrapper__progress, barAnimatedStyle]}>
-                <View />
+                <Animated.View style={[styles.progress, progressAnimatedStyle]} />
             </Animated.View>
             <Animated.ScrollView
                 style={styles.wrapper__content}
@@ -295,13 +355,24 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
                                 <Animated.Text style={[styles.row__author, authorAnimatedStyle]}>
                                     Автор: William B.
                                 </Animated.Text>
-                                <IconButton
-                                    containerStyle={bookIconAnimatedStyle}
-                                    source={require('@assets/icons/book.png')}
-                                    imageStyle={styles.row__icon}
-                                    title={'12%'}
-                                    onLayout={handleBookIconlayout}
-                                />
+                                <Animated.View style={bookIconAnimatedStyle} onLayout={handleBookIconlayout}>
+                                    <Pressable
+                                        onPress={() =>
+                                            scrollViewRef.current.scrollTo({
+                                                y: storyTextHeight * story.progress,
+                                            })
+                                        }
+                                    >
+                                        <View style={styles.book_background} />
+                                        <Animated.View
+                                            style={[styles.book_filling_part, { width: 32 * story.progress }]}
+                                        />
+                                        <BookStencil height={32} width={32} fill={'#fff'} />
+                                        <Text style={{ alignSelf: 'center' }}>
+                                            {(story.progress * 100).toFixed(0) + '%'}
+                                        </Text>
+                                    </Pressable>
+                                </Animated.View>
                             </View>
                         </View>
 
@@ -353,6 +424,17 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
 const styles = StyleSheet.create({
     wrapper__content: { backgroundColor: colors.SOFT_WHITE },
+    book_background: {
+        height: 32,
+        width: 32,
+        position: 'absolute',
+        backgroundColor: colors.BOOK_BACKGROUND,
+    },
+    book_filling_part: {
+        height: 32,
+        position: 'absolute',
+        backgroundColor: colors.BOOK_FILLED_PART,
+    },
     wrapper__progress: {
         position: 'absolute',
         marginHorizontal: 12,
@@ -361,6 +443,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.PROGRESS,
         height: 8,
         zIndex: 1000,
+    },
+    progress: {
+        backgroundColor: colors.SOFT_WHITE,
+        height: 8,
+        width: 30,
+        borderRadius: 20,
     },
     content__cover: {
         flexDirection: 'column',

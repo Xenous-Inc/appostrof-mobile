@@ -1,7 +1,9 @@
 import { Storage } from 'expo-storage';
 import logs from './logs';
 
-export const StorageKeys = {};
+export const StorageKeys = {
+    STORY: 'STORAGE_STORY',
+};
 
 export const readData = async <T>(key: string): Promise<T | undefined> => {
     try {

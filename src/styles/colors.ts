@@ -8,7 +8,8 @@ const colors = {
     SKELETON: '#F0F0F0',
 
     PROGRESS: '#C2C0BD',
-    SKELETON: '#F0F0F0',
+    BOOK_BACKGROUND: '#C2C1BE',
+    BOOK_FILLED_PART: '#323232',
     TEXT_PRIMARY: '#1D1D1D',
 };
 
