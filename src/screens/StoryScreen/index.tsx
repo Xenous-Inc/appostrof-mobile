@@ -239,7 +239,7 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         );
 
         return { width };
-    }, [scrollProgress]);
+    }, [windowWidth]);
 
     // transform: translate book icon view during the animated transition
     const bookIconAnimatedStyle = useAnimatedStyle(() => {
@@ -309,7 +309,7 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         <SafeAreaView>
             <StatusBar backgroundColor={colors.BLACK} style={'light'} />
             <Animated.View style={[styles.wrapper__progress, barAnimatedStyle]}>
-                <Animated.View style={[styles.progress, progressAnimatedStyle]} />
+                <Animated.View style={[styles.progress__bar, progressAnimatedStyle]} />
             </Animated.View>
             <Animated.ScrollView
                 style={styles.wrapper__content}
@@ -359,9 +359,16 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
                                     >
                                         <View style={styles.iconBook__background} />
                                         <Animated.View
-                                            style={[styles.iconBook__trapharet, { width: 32 * story.progress }]}
+                                            style={[
+                                                styles.iconBook__trapharet,
+                                                { width: styles.iconBook__trapharet.width * story.progress },
+                                            ]}
                                         />
-                                        <BookStencil height={32} width={32} fill={'#fff'} />
+                                        <BookStencil
+                                            height={styles.iconBook__background.height}
+                                            width={styles.iconBook__background.width}
+                                            fill={colors.WHITE}
+                                        />
                                         <Text style={styles.iconBook__text}>
                                             {(story.progress * 100).toFixed(0) + '%'}
                                         </Text>
@@ -428,7 +435,7 @@ const styles = StyleSheet.create({
         height: 8,
         zIndex: 1000,
     },
-    progress: {
+    progress__bar: {
         backgroundColor: colors.GRAY,
         height: 8,
     },
@@ -489,6 +496,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: colors.GRAY,
         height: 32,
+        width: 32,
     },
     iconBook__background: {
         position: 'absolute',
