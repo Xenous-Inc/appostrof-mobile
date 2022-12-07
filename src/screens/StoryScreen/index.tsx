@@ -92,9 +92,10 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
     useEffect(() => {
         if (currentAppState === 'background' || currentAppState === 'inactive') {
-            // FIXME:
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
+            if (story.progress < scrollProgress.value)
+                // FIXME:
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
         }
     }, [currentAppState]);
 
