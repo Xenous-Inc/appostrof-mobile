@@ -425,7 +425,6 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 };
 
 const styles = StyleSheet.create({
-    wrapper__content: { backgroundColor: colors.SOFT_WHITE },
     wrapper__progress: {
         position: 'absolute',
         overflow: 'hidden',
@@ -438,7 +437,10 @@ const styles = StyleSheet.create({
     },
     progress__bar: {
         backgroundColor: colors.GRAY,
-        height: 8,
+        height: '100%;,
+    },
+    wrapper__content: { 
+        backgroundColor: colors.SOFT_WHITE,
     },
     content__cover: {
         flexDirection: 'column',
