@@ -5,9 +5,10 @@ const colors = {
     GRAY: '#323232',
     BLUE: '#ADC9CF',
     SOFT_WHITE: '#FFFDF9',
+    SKELETON: '#F0F0F0',
 
     PROGRESS: '#C2C0BD',
-    SKELETON: '#F0F0F0',
+    BOOK_BACKGROUND: '#C2C1BE',
     TEXT_PRIMARY: '#1D1D1D',
 };
 
