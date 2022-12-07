@@ -9,7 +9,6 @@ const colors = {
 
     PROGRESS: '#C2C0BD',
     BOOK_BACKGROUND: '#C2C1BE',
-    BOOK_FILLED_PART: '#323232',
     TEXT_PRIMARY: '#1D1D1D',
 };
 

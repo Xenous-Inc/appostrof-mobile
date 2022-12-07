@@ -70,7 +70,7 @@ const DATA =
     '«Слава богу, — ворчал он про себя, — кажется, дитя умыт, причесан, накормлен. Куда как нужно\n' +
     'тратить лишние деньги и';
 
-const story: IStory = {
+const story: IStory & { progress: number } = {
     id: '0',
     title: 'story',
     authors: [{ id: '0', name: 'Nikita' }],
@@ -87,6 +87,17 @@ const story: IStory = {
 const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Main.STORY>> = () => {
     // window safe area height
     const insets = useSafeAreaInsets();
+    // defines current app state active/background/inactive
+    const currentAppState = useAppState();
+
+    useEffect(() => {
+        if (currentAppState === 'background' || currentAppState === 'inactive') {
+            // FIXME:
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
+        }
+    }, [currentAppState]);
+
     const windowHeight = useMemo(() => Dimensions.get('screen').height - insets.top - insets.bottom, [insets]);
     const windowWidth = useMemo(() => Dimensions.get('screen').width - insets.left - insets.right, [insets]);
 
@@ -111,9 +122,6 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     // defines progress of measuring short story layout: 0 or 1
     const isShortStoryMeasured = useSharedValue(false);
 
-    // defines current app state active/background
-    const currentAppState = useAppState();
-
     // disable paging after cover collapse
     const scrollViewAnimatedProps = useAnimatedProps<ScrollViewProps>(
         () => ({
@@ -121,16 +129,6 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
         }),
         [],
     );
-
-    useEffect(() => {
-        console.log(currentAppState);
-        console.log(story.progress);
-        if (currentAppState === 'background') {
-            // FIXME:
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
-        }
-    }, [currentAppState]);
 
     // disable story text pointer events while cover is not collapsed
     const storyTextAnimatedProps = useAnimatedProps<ViewProps>(
@@ -143,7 +141,10 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     const handleScrollAnimated = useAnimatedScrollHandler(
         event => {
             collapseProgress.value = Math.min(event.contentOffset.y / windowHeight, 1);
-            scrollProgress.value = Math.max(event.contentOffset.y / storyTextHeight, 0);
+            scrollProgress.value = Math.max(
+                (event.contentOffset.y - windowHeight) / (storyTextHeight - windowHeight),
+                0,
+            );
         },
         [windowHeight, storyTextHeight],
     );
@@ -231,21 +232,14 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
     const progressAnimatedStyle = useAnimatedStyle(() => {
         const width = interpolate(
-            collapseProgress.value,
+            scrollProgress.value,
             [0, 1],
-            [0, (windowWidth - styles.wrapper__progress.marginHorizontal * 2) * scrollProgress.value],
+            [0, windowWidth - styles.wrapper__progress.marginHorizontal * 2],
             Extrapolation.CLAMP,
         );
 
-        const borderRadius = interpolate(
-            collapseProgress.value,
-            [1 / 3, 1],
-            [styles.wrapper__progress.borderRadius, 0],
-            Extrapolation.CLAMP,
-        );
-
-        return { width, borderTopLeftRadius: borderRadius, borderTopRightRadius: borderRadius };
-    }, [bookIconShiftTop, bookIconShiftRight, shortStoryTextShiftBottom, insets.top]);
+        return { width };
+    }, [scrollProgress]);
 
     // transform: translate book icon view during the animated transition
     const bookIconAnimatedStyle = useAnimatedStyle(() => {
@@ -363,12 +357,12 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
                                             })
                                         }
                                     >
-                                        <View style={styles.book_background} />
+                                        <View style={styles.iconBook__background} />
                                         <Animated.View
-                                            style={[styles.book_filling_part, { width: 32 * story.progress }]}
+                                            style={[styles.iconBook__trapharet, { width: 32 * story.progress }]}
                                         />
                                         <BookStencil height={32} width={32} fill={'#fff'} />
-                                        <Text style={{ alignSelf: 'center' }}>
+                                        <Text style={styles.iconBook__text}>
                                             {(story.progress * 100).toFixed(0) + '%'}
                                         </Text>
                                     </Pressable>
@@ -424,19 +418,9 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
 
 const styles = StyleSheet.create({
     wrapper__content: { backgroundColor: colors.SOFT_WHITE },
-    book_background: {
-        height: 32,
-        width: 32,
-        position: 'absolute',
-        backgroundColor: colors.BOOK_BACKGROUND,
-    },
-    book_filling_part: {
-        height: 32,
-        position: 'absolute',
-        backgroundColor: colors.BOOK_FILLED_PART,
-    },
     wrapper__progress: {
         position: 'absolute',
+        overflow: 'hidden',
         marginHorizontal: 12,
         right: 0,
         borderRadius: 20,
@@ -445,10 +429,8 @@ const styles = StyleSheet.create({
         zIndex: 1000,
     },
     progress: {
-        backgroundColor: colors.SOFT_WHITE,
+        backgroundColor: colors.GRAY,
         height: 8,
-        width: 30,
-        borderRadius: 20,
     },
     content__cover: {
         flexDirection: 'column',
@@ -502,6 +484,22 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         aspectRatio: 1,
+    },
+    iconBook__trapharet: {
+        position: 'absolute',
+        backgroundColor: colors.GRAY,
+        height: 32,
+    },
+    iconBook__background: {
+        position: 'absolute',
+        backgroundColor: colors.BOOK_BACKGROUND,
+        height: 32,
+        width: 32,
+    },
+    iconBook__text: {
+        fontSize: sizes.TEXT_SMALL,
+        color: colors.TEXT_PRIMARY,
+        fontFamily: 'OpenSans_Regular',
     },
     row_icon_clock: {
         marginRight: 2,
