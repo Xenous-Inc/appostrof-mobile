@@ -10,8 +10,7 @@ interface IStory {
     linkToText: string | null;
     tags: Array<string> | null;
     rating: number | null;
-    dateOfWriting: string | null;
-    dateOfReading: string | null;
+    date: string | null;
     percentOfReading: number | null;
 }
 

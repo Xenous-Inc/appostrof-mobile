@@ -17,7 +17,7 @@ export interface IQuotesState extends IApiState {
 }
 
 const initialState: IQuotesState = {
-    quotes: undefined,
+    quotes: [],
     isLoading: false,
     error: null,
 };
