@@ -1,31 +1,34 @@
-import React, { useMemo } from 'react';
+import colors from '@styles/colors';
+import sizes from '@styles/sizes';
+import { darkenColor, setAlpha } from '@utils/colors';
+import React, { ReactElement, useMemo } from 'react';
 import {
     GestureResponderEvent,
     Image,
     ImageSourcePropType,
+    ImageStyle,
     Pressable,
     StyleProp,
     StyleSheet,
     Text,
     TextStyle,
+    ViewProps,
     ViewStyle,
 } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import Space from '@components/atoms/space';
-import sizes from '@styles/sizes';
-import { darkenColor, setAlpha } from '@utils/colors';
-import colors from '@styles/colors';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { IIcon } from '@components/atoms/Icon';
 
 enum Mode {
     Contained = 'contained',
     Blank = 'blank',
 }
 
-export interface IButton {
+export interface IIconButton extends ViewProps {
     mode?: Mode;
-    title: string;
-    icon?: ImageSourcePropType;
-    iconSize?: number;
+    title?: string;
+    icon?: ReactElement;
+    source?: ImageSourcePropType;
+    imageStyle?: StyleProp<ImageStyle>;
     color?: string;
     borderColor?: string;
     backgroundColor?: string;
@@ -36,21 +39,22 @@ export interface IButton {
     onLongPress?(event: GestureResponderEvent): void;
 }
 
-const Button: React.FC<IButton> & { Mode: typeof Mode } = props => {
+const IconButton: React.FC<IIconButton> & { Mode: typeof Mode } = props => {
     const {
         mode = Mode.Blank,
         title,
         icon,
-        iconSize,
+        source,
+        imageStyle,
         color = colors.TEXT_PRIMARY,
         backgroundColor = colors.BLUE,
         borderColor = colors.BLUE,
         disabled,
+        textStyle,
+        containerStyle,
         onPress,
         onLongPress,
     } = props;
-    const textStyle = StyleSheet.flatten<TextStyle>(props.textStyle);
-    const containerStyle = StyleSheet.flatten<ViewStyle>(props.containerStyle);
 
     const isPressed = useSharedValue(false);
     const inactiveBackgroundColor = useMemo<string>(
@@ -70,6 +74,7 @@ const Button: React.FC<IButton> & { Mode: typeof Mode } = props => {
 
     return (
         <Animated.View
+            {...props}
             style={[
                 styles.wrapper,
                 containerStyle,
@@ -82,9 +87,10 @@ const Button: React.FC<IButton> & { Mode: typeof Mode } = props => {
             <Pressable
                 style={[
                     styles.wrapper__content,
+                    !!title && styles.wrapper__content_state_title,
                     // todo: merge and apply incoming paddings
-                    !!containerStyle?.width && { width: '100%' },
-                    !!containerStyle?.height && { height: '100%' },
+                    !!StyleSheet.flatten(containerStyle)?.width && { width: '100%' },
+                    !!StyleSheet.flatten(containerStyle)?.height && { height: '100%' },
                 ]}
                 onPress={onPress ?? onPress}
                 onLongPress={onLongPress ?? onLongPress}
@@ -96,23 +102,25 @@ const Button: React.FC<IButton> & { Mode: typeof Mode } = props => {
                 }}
                 disabled={disabled}
             >
-                <Text style={[styles.content__text, textStyle, { color }]} selectable={false}>
-                    {title}
-                </Text>
-                {!!title && icon && <Space mode={Space.Mode.Vertical} size={8} />}
-                {icon && <Image source={icon} style={[styles.content__icon, !!iconSize && { width: iconSize }]} />}
+                {icon ? icon : source ? <Image source={source} style={imageStyle} /> : null}
+                {title && (
+                    <Text style={[styles.content__text, textStyle, { color }]} selectable={false}>
+                        {title}
+                    </Text>
+                )}
             </Pressable>
         </Animated.View>
     );
 };
-Button.Mode = Mode;
+IconButton.Mode = Mode;
 
 const styles = StyleSheet.create({
     wrapper: {
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
-        borderRadius: 16,
+        borderRadius: 24,
+        aspectRatio: 1,
     },
     wrapper_property_padding: {
         padding: 0,
@@ -129,22 +137,21 @@ const styles = StyleSheet.create({
         opacity: 0.56,
     },
     wrapper__content: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
+        padding: 6,
+        aspectRatio: 1,
+    },
+    wrapper__content_state_title: {
+        paddingHorizontal: 4,
+        paddingVertical: 4,
     },
     content__text: {
         backgroundColor: colors.TRANSPARENT,
-        fontSize: sizes.TEXT_MEDIUM,
+        fontSize: sizes.TEXT_LITTLE,
         textAlign: 'center',
-    },
-    content__icon: {
-        width: 24,
-        aspectRatio: 1,
-        resizeMode: 'contain',
     },
 });
 
-export default Button;
+export default IconButton;
