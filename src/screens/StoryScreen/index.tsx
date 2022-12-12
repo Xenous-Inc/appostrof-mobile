@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    AppState,
     Dimensions,
     Image,
     LayoutChangeEvent,
@@ -70,7 +69,7 @@ const DATA =
     '«Слава богу, — ворчал он про себя, — кажется, дитя умыт, причесан, накормлен. Куда как нужно\n' +
     'тратить лишние деньги и';
 
-const story: IStory & { progress: number } = {
+const story: IStory = {
     id: '0',
     title: 'story',
     authors: [{ id: '0', name: 'Nikita' }],
@@ -80,7 +79,7 @@ const story: IStory & { progress: number } = {
     linkToText: 'link',
     tags: ['po', 'pi'],
     rating: 4,
-    dateOfWriting: '1 sep',
+    date: '1 sep',
     progress: 0.8,
 };
 
@@ -93,10 +92,9 @@ const StoryScreen: React.FC<StackScreenProps<MainStackParams, typeof Screens.Mai
     useEffect(() => {
         if (currentAppState === 'background' || currentAppState === 'inactive') {
             if (story.progress < scrollProgress.value)
-                // FIXME:
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                writeData(StorageKeys.STORY, { ...story, progress: scrollProgress.value }).then(() => {});
+                writeData(StorageKeys.STORY_CACHE, { ...story, progress: scrollProgress.value });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentAppState]);
 
     const windowHeight = useMemo(() => Dimensions.get('screen').height - insets.top - insets.bottom, [insets]);
@@ -437,9 +435,9 @@ const styles = StyleSheet.create({
     },
     progress__bar: {
         backgroundColor: colors.GRAY,
-        height: '100%;,
+        height: '100%',
     },
-    wrapper__content: { 
+    wrapper__content: {
         backgroundColor: colors.SOFT_WHITE,
     },
     content__cover: {

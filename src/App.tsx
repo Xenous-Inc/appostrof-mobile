@@ -1,7 +1,9 @@
 import React from 'react';
-import { useFonts } from 'expo-font';
 import AppNavigator from '@navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { useFonts } from 'expo-font';
+import store from './store';
 
 export default function App() {
     const [fontsLoaded] = useFonts({
@@ -14,8 +16,10 @@ export default function App() {
     }
 
     return (
-        <SafeAreaProvider>
-            <AppNavigator />
-        </SafeAreaProvider>
+        <Provider store={store}>
+            <SafeAreaProvider>
+                <AppNavigator />
+            </SafeAreaProvider>
+        </Provider>
     );
 }
